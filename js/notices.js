@@ -1,0 +1,1 @@
+(function(){document.addEventListener('DOMContentLoaded',()=>{const y=document.querySelector('#notice-year');if(!y)return;y.addEventListener('change',()=>document.querySelectorAll('#notice-list [data-year]').forEach(r=>r.style.display=y.value==='all'||r.dataset.year===y.value?'grid':'none'))})})();

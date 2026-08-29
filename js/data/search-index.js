@@ -1,0 +1,22 @@
+window.SEARCH_INDEX=[
+{title:'A栋 1403 · 两室一厅',url:'homes/a-1403.html',category:'房源',date:'2026-08-18',keywords:['1403','A栋','52㎡','格局优化','看房'],aliases:['a1403','a 1403','two bedroom'],snippet:'A栋14层，52㎡，2024年完成格局优化。当前可预约看房。'},
+{title:'A栋 1404 · 单间（历史页面）',url:'homes/archive/a-1404.html',category:'历史房源',date:'2023-12-19',keywords:['1404','单间','18㎡','下架'],aliases:['14-04','a1404','a 1404'],snippet:'页面已下架。历史图片与房源标题保留，原预约与合同信息不再提供。'},
+{title:'失物招领：透明长柄伞',url:'service/lost-found.html#LF231103',category:'物业服务',date:'2023-11-03',keywords:['1404','雨伞','透明伞','失物'],aliases:['umbrella','lost found'],snippet:'A栋14层走廊拾得，登记地点为 1404 门前。'},
+{title:'六月窗景 · 住户作品选',url:'news/2023-summer-window.html',category:'住户作品',date:'2023-06-24',keywords:['周芷珩','高架尽头','窗景','透明伞','插画'],aliases:['zhou zhiheng','zhiheng'],snippet:'住户作品《高架尽头》，作者周芷珩，拍摄于A栋。'},
+{title:'2021 邻里摄影日',url:'news/2021-photo-day.html',category:'社区新闻',date:'2021-05-22',keywords:['2021','摄影日','A栋14层','走廊','活动合影'],aliases:['photo day','six doors'],snippet:'住户摄影活动与A栋高层公共走廊合影。'},
+{title:'2022 冬季公共区域保洁',url:'news/2022-winter-care.html',category:'社区新闻',date:'2022-12-09',keywords:['2022','保洁','A栋14层','镜面','门牌'],aliases:['winter care','cleaning'],snippet:'冬季公共区域保洁记录与工作照片。'},
+{title:'旧宿舍更新完成',url:'news/2018-renovation.html',category:'社区新闻',date:'2018-10-02',keywords:['2018','旧改','冯工','冯启元','衡达工程','施工'],aliases:['renovation','feng'],snippet:'两栋旧宿舍完成长期租赁改造，附公开工程摘要。'},
+{title:'A栋高区夜间排风临时检查',url:'notices/2023-12-17.html',category:'社区公告',date:'2023-12-17',keywords:['2023-12-17','12月17日','排风','14层','检修','罗启明','21:30'],aliases:['exhaust','ventilation','luo qiming'],snippet:'A栋高区排风临时检查，部分楼层夜间可能出现短时设备声。'},
+{title:'A栋14层公共排风维护',url:'notices/2026-07.html',category:'社区公告',date:'2026-07-11',keywords:['2026','14层','排风','异响','1403','维护'],aliases:['exhaust','ventilation'],snippet:'针对14层夜间低频异响安排公共竖井复检。'},
+{title:'维修工单公开查询',url:'service/tickets.html',category:'物业服务',date:'2026-08-01',keywords:['工单','报修','异味','头晕','倒灌','QS231215','周小姐','罗启明'],aliases:['ticket','repair','exhaust'],snippet:'按房号、工单编号或公开案例关键词查询已结单与待复检记录。'},
+{title:'停车与访客登记说明',url:'service/parking.html',category:'物业服务',date:'2026-06-01',keywords:['访客','周岚','14层','停车','8216'],aliases:['zhou lan','parking','visitor'],snippet:'访客规则与经脱敏的历史预约样例。'},
+{title:'A栋户型与楼层导览',url:'plans/index.html',category:'户型',date:'2024-06-10',keywords:['户型','14层','1401','1402','1403','1405','1406','52㎡'],aliases:['floor plan','plan'],snippet:'A栋常用户型与当前14层导览，含格局优化说明。'},
+{title:'消防与疏散备案摘录',url:'downloads/index.html#fire',category:'下载中心',date:'2018-03-21',keywords:['消防','疏散','图纸','设备储藏','2018','pdf','34㎡','18㎡'],aliases:['fire evacuation','drawing'],snippet:'A栋14层消防与疏散公开摘录，包含五套住宅和设备/储藏空间。'},
+{title:'住户设备与公共排风说明',url:'downloads/index.html#exhaust',category:'下载中心',date:'2023-09-01',keywords:['设备','公共排风','竖井','止回','燃气','头晕','反味','倒灌'],aliases:['exhaust','ventilation','shaft'],snippet:'说明户内支管、公共排风竖井、止回组件与报修建议。'},
+{title:'社区关怀服务简报 · 2023年12月',url:'news/2023-care-note.html',category:'社区新闻',date:'2023-12-20',keywords:['2023-12-18','12月18日','住户','意外','关怀','燃气设备'],aliases:['incident','care note'],snippet:'就12月18日凌晨一位年轻住户突发意外发布公开关怀说明。'},
+{title:'社区影像资料整理志愿者致谢',url:'news/2024-archive-thanks.html',category:'社区新闻',date:'2024-04-12',keywords:['周岚','影像','归档','授权','联系','8216'],aliases:['zhou lan','archive'],snippet:'感谢协助整理历史社区影像与住户作品授权的联系人。'},
+{title:'关于栖山 · 旧城更新与长期居住',url:'about/index.html',category:'关于栖山',date:'2026-02-05',keywords:['澄川置业','陈炜','2017','2018','旧城更新'],aliases:['qishan residence','about'],snippet:'栖山公寓运营历史、服务团队与长期租住说明。'},
+{title:'网站主体与内容归档说明',url:'legal/index.html',category:'网站信息',date:'2026-08-01',keywords:['更新时间','归档','内容维护','主体','历史页面','唐雯'],aliases:['archive policy','privacy'],snippet:'说明公开页面的更新时间、归档、授权调整与内容维护规则。'},
+{title:'宠物与社区居住规则',url:'community/index.html#pets',category:'社区生活',date:'2026-08-12',keywords:['宠物','安静时段','快递','社区'],aliases:['pet','quiet hours'],snippet:'公共区域、宠物、安静时段与访客规则。'},
+{title:'新住户入住与搬家预约指南',url:'downloads/index.html',category:'下载中心',date:'2026-03-01',keywords:['搬家','入住','水电','网络','指南'],aliases:['move in','moving'],snippet:'新住户搬家预约、水电表、网络与公共区域说明。'}
+];

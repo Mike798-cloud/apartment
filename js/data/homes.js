@@ -1,0 +1,1 @@
+window.QISHAN_HOMES={summary:{publicTotal:136,A:68,B:69},items:[{id:'A-1403',building:'A',type:'two',area:52,status:'available'},{id:'A-0802',building:'A',type:'studio',area:34,status:'leased'},{id:'B-1106',building:'B',type:'studio',area:38,status:'turnover'},{id:'B-1503',building:'B',type:'two',area:51,status:'leased'}]};
