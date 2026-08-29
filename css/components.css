@@ -30,3 +30,13 @@
 .lightbox-zoom{min-width:52px;text-align:center;color:#f4f5f2;font-size:12px;font-variant-numeric:tabular-nums;align-self:center}
 .lightbox-stage{touch-action:pan-x pan-y;overscroll-behavior:contain}
 .lightbox-stage img{transform-origin:center center;will-change:transform}
+
+
+/* v1.4: light onboarding + optional-reading emphasis without turning the site into a quest UI */
+.reading-key{font-weight:800;font-style:italic;color:#253a31;background:linear-gradient(transparent 72%,rgba(126,151,137,.22) 72%);text-decoration:underline;text-decoration-style:dotted;text-decoration-color:rgba(49,91,73,.34);text-underline-offset:3px;text-decoration-thickness:1px}
+.reading-guide{border-bottom:1px solid #d7ddd7;background:#f3f5f0;color:#4f5b54;font-size:12px}
+.reading-guide .wrap{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-block:9px}.reading-guide p{margin:0}.reading-guide button{border:0;background:transparent;color:var(--green);font-weight:700;cursor:pointer;white-space:nowrap}
+.shared-link-intro[hidden]{display:none}.shared-link-intro{position:fixed;inset:0;z-index:300;background:rgba(27,37,32,.66);display:grid;place-items:center;padding:24px;backdrop-filter:blur(8px)}
+.shared-link-card{width:min(560px,100%);background:#fffef9;border:1px solid #d6ddd7;border-radius:12px;box-shadow:0 28px 90px rgba(18,29,23,.3);padding:28px}.shared-link-app{font-size:12px;color:#718078;letter-spacing:.08em;margin-bottom:8px}.shared-link-card h2{font-size:27px;margin:0 0 12px}.shared-link-card>p{color:#536159}.shared-preview{display:grid;grid-template-columns:150px 1fr;gap:15px;border:1px solid var(--line);background:#f5f6f1;border-radius:8px;overflow:hidden;margin:18px 0}.shared-preview picture{height:118px}.shared-preview img{width:100%;height:100%;object-fit:cover}.shared-preview>div{padding:15px 14px 12px 0;display:flex;flex-direction:column;justify-content:center;gap:3px}.shared-preview span{font-size:13px}.shared-preview small{font-size:10px;color:#819087}.shared-guide{border-left:3px solid #7c9a88;background:#eef3ee;padding:11px 13px;font-size:12px}.shared-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}.intro-open{overflow:hidden}
+.lost-card>picture{background:#ded8cc}.lost-card>picture img{filter:saturate(.9) contrast(1.035)}
+@media(max-width:680px){.shared-link-intro{padding:12px}.shared-link-card{padding:20px 17px}.shared-link-card h2{font-size:23px}.shared-preview{grid-template-columns:110px 1fr}.shared-preview picture{height:110px}.shared-preview>div{padding:10px 9px 9px 0}.shared-actions{display:grid;grid-template-columns:1fr}.shared-actions .btn{text-align:center}.reading-guide .wrap{align-items:flex-start}.reading-guide p{line-height:1.55}}
