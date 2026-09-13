@@ -69,7 +69,6 @@
     const info=document.querySelector('.footer-grid>div:last-child p');
     if(info&&!info.querySelector('[data-memo-footer]')){const br=document.createElement('br'),a=document.createElement('a');a.href=memoHref;a.textContent='看房备忘';a.dataset.memoFooter='1';info.append(br,a)}
     const p=location.pathname.replace(/\/+$/,'/');
-    if(p.endsWith('/feedback/index.html')||p.endsWith('/feedback/')){const hint=document.querySelector('.sidebar .box:last-child p');if(hint&&!hint.querySelector('[data-memo-feedback]')){hint.append(document.createElement('br'));const a=document.createElement('a');a.href=memoHref;a.textContent='查看看房备忘';a.dataset.memoFeedback='1';hint.append(a)}}
     const configs=[
       {match:x=>x.endsWith('/homes/a-1403.html')||x.endsWith('/homes/a-1403/'),id:'page-a1403',category:'房子本身',text:'A栋1403：¥4,980/月，52㎡，两室一厅，东向，14/17层；厨卫排风接公共竖井。现场还要确认窗体、水电表、固定设备与交付家具。'},
       {match:x=>x.endsWith('/plans/index.html')||x.endsWith('/plans/'),id:'page-plans-14f',category:'房子本身',text:'A栋14层当前导览只标1401、1402、1403、1405、1406五个住宅单元；公开导览与旧备案图用途不同，核对历史边界要再看2018旧改公开摘录。'},
@@ -85,5 +84,56 @@
     btn.addEventListener('click',()=>{QishanState.memoAdd({id:cfg.id,text:cfg.text,category:cfg.category,sourcePath:location.pathname,sourceTitle:document.body.dataset.pageTitle||document.title,at:Date.now()});sync()});
     sync();const update=article.querySelector('.update-line');article.insertBefore(box,update||null);
   }
-  document.addEventListener('DOMContentLoaded',()=>{if(window.QishanState&&!/\/memo\//.test(location.pathname))QishanState.visit(location.pathname,document.body.dataset.pageTitle||document.title);setupSharedLinkIntro();setupMenu();setupLightbox();setupDocs();setupClear();setupActiveNav();setupImageLoading();loadMemoStyles();setupMemoTools();loadNarrativeStyles();loadSupport()});
+  function setupProgressTools(){
+    if(!window.QishanState||typeof QishanState.progress!=='function')return;
+    const root=document.body.dataset.root||'';
+    const info=QishanState.progress();
+    const dock=document.createElement('div');
+    dock.className='qs-progress-dock';
+    dock.innerHTML=`<button class="qs-progress-trigger" type="button" aria-expanded="false" aria-controls="qs-progress-panel"><span>调查进度</span><b data-progress-value>${info.percent}%</b><i aria-hidden="true"><em data-progress-bar></em></i></button>
+      <section class="qs-progress-panel" id="qs-progress-panel" hidden aria-label="本次调查进度">
+        <div class="qs-progress-head"><div><small>本次调查</small><strong data-progress-stage></strong></div><button type="button" class="qs-progress-close" aria-label="关闭调查进度">×</button></div>
+        <div class="qs-progress-number"><b data-progress-panel-value></b><span>完成度</span></div>
+        <div class="qs-progress-track" aria-hidden="true"><i data-progress-panel-bar></i></div>
+        <p class="qs-progress-summary" data-progress-summary></p>
+        <div class="qs-progress-actions"><a href="${root}memo/index.html">看房备忘</a><button type="button" data-reset-investigation>重置本次调查</button></div>
+      </section>`;
+    document.body.appendChild(dock);
+    const trigger=dock.querySelector('.qs-progress-trigger'),panel=dock.querySelector('.qs-progress-panel'),close=dock.querySelector('.qs-progress-close');
+    function paint(){
+      const p=QishanState.progress();
+      dock.querySelector('[data-progress-value]').textContent=p.percent+'%';
+      dock.querySelector('[data-progress-bar]').style.width=p.percent+'%';
+      dock.querySelector('[data-progress-panel-value]').textContent=p.percent+'%';
+      dock.querySelector('[data-progress-panel-bar]').style.width=p.percent+'%';
+      dock.querySelector('[data-progress-stage]').textContent=p.stage;
+      dock.querySelector('[data-progress-summary]').textContent=p.summary;
+      trigger.setAttribute('aria-label','调查进度 '+p.percent+'%');
+    }
+    function hide(){panel.hidden=true;trigger.setAttribute('aria-expanded','false')}
+    function show(){panel.hidden=false;trigger.setAttribute('aria-expanded','true');paint();setTimeout(()=>close.focus(),20)}
+    trigger.addEventListener('click',()=>panel.hidden?show():hide());
+    close.addEventListener('click',()=>{hide();trigger.focus()});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden){hide();trigger.focus()}});
+    document.addEventListener('click',e=>{if(!panel.hidden&&!dock.contains(e.target))hide()});
+    dock.querySelector('[data-reset-investigation]').addEventListener('click',()=>{
+      let overlay=document.querySelector('.qs-reset-overlay');
+      if(!overlay){
+        overlay=document.createElement('div');overlay.className='qs-reset-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','qs-reset-title');
+        overlay.innerHTML='<div class="qs-reset-card"><h2 id="qs-reset-title">重新开始这次调查？</h2><p>会清除最近浏览、站内搜索、维修工单查询、看房备忘以及已经发送给许唯的回复。自愿支持记录不会被清除。</p><div class="qs-reset-actions"><button type="button" class="btn secondary" data-reset-cancel>取消</button><button type="button" class="btn qs-reset-confirm" data-reset-confirm>确认重置</button></div></div>';
+        document.body.appendChild(overlay);
+        overlay.querySelector('[data-reset-cancel]').addEventListener('click',()=>{overlay.classList.remove('open');document.documentElement.classList.remove('reset-open');dock.querySelector('[data-reset-investigation]').focus()});
+        overlay.querySelector('[data-reset-confirm]').addEventListener('click',()=>{
+          QishanState.clear();
+          try{sessionStorage.removeItem('qs_shared_intro_v16')}catch(e){}
+          location.href=root+'index.html?intro=1';
+        });
+        overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.querySelector('[data-reset-cancel]').click()});
+        overlay.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();overlay.querySelector('[data-reset-cancel]').click()}});
+      }
+      hide();overlay.classList.add('open');document.documentElement.classList.add('reset-open');setTimeout(()=>overlay.querySelector('[data-reset-cancel]').focus(),20);
+    });
+    paint();
+  }
+  document.addEventListener('DOMContentLoaded',()=>{if(window.QishanState)QishanState.visit(location.pathname,document.body.dataset.pageTitle||document.title);setupSharedLinkIntro();setupMenu();setupLightbox();setupDocs();setupClear();setupActiveNav();setupImageLoading();loadMemoStyles();setupMemoTools();loadNarrativeStyles();setupProgressTools();loadSupport()});
 })();

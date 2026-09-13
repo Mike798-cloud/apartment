@@ -80,6 +80,22 @@
         public:{allowed:facts.currentRoom&&facts.floorPlan&&facts.historicalExhaust&&facts.oldRoom&&facts.incident&&facts.residentIdentity,reason:'现有材料还不足以同时支撑房况、楼栋系统与旧记录之间的公开判断。'}
       }};
     },
+    progress(){
+      const s=load(),e=api.assessEvidence(),f=e.facts||{},o=e.options||{};
+      let percent=0,summary='还没有形成有效的看房记录。',stage='尚未开始';
+      if(f.currentRoom){percent=14;stage='核对房源';summary='已经开始核对 A栋1403 的公开房源信息。'}
+      if(f.currentRoom&&(f.floorPlan||f.currentExhaust)){percent=28;stage='核对现况';summary='房源现况与至少一项户型或物业资料已经交叉核对。'}
+      if(f.oldRoom||(f.currentRoom&&f.floorPlan&&f.currentExhaust)){percent=44;stage='翻查旧资料';summary='调查已经进入历史房源、旧改或楼层结构资料。'}
+      if(f.historicalExhaust||f.incident){percent=60;stage='核对历史记录';summary='已经核对到与 A栋高区有关的历史物业或事件记录。'}
+      if(f.residentIdentity){percent=74;stage='确认人物线索';summary='旧记录中的住户身份线索已经能够相互印证。'}
+      if(f.residentIdentity&&(f.archiveContact||f.visitorLink)){percent=86;stage='交叉关联';summary='人物与旧资料之间已经出现可交叉核对的关联。'}
+      if((o.contact&&o.contact.allowed)||(o.public&&o.public.allowed)){percent=94;stage='形成判断';summary='主要公开材料已经能够支撑较完整的判断。'}
+      const endingByAction={avoid:'avoid',verify:'verify',contact:'archive',public:'public'};
+      const action=s.finalChoice&&s.finalChoice.action;
+      const validChoice=!!(action&&endingByAction[action]===s.ending&&o[action]&&o[action].allowed);
+      if(validChoice){percent=100;stage='调查完成';summary='已经回复许唯，本次调查完成。'}
+      return {percent,stage,summary,complete:percent===100};
+    },
     memoAdd(item){const row=normalizeMemo(item);if(!row)return null;const s=load();s.memos=s.memos.filter(x=>x.id!==row.id);s.memos.push(row);s.memos=s.memos.slice(-60);save(s);return row},
     memoRemove(id){if(!id)return;const s=load();s.memos=s.memos.filter(x=>x.id!==id);save(s)},
     memoClear(){const s=load();s.memos=[];save(s)},
