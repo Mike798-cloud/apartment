@@ -1,21 +1,9 @@
 (function(){
-  'use strict';
   function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-  function norm(s){return String(s||'').toLowerCase().replace(/[，。；、/\\\s_-]+/g,'')}
-  function terms(s){return String(s||'').trim().split(/[\s,，、/]+/).map(norm).filter(Boolean)}
-  function haystack(t){return norm([t.id,t.date,t.room,t.text,t.status].concat(t.keywords||[]).join(' '))}
-  function render(q){
-    const box=document.querySelector('#ticket-list'),count=document.querySelector('#ticket-count');if(!box||!window.QISHAN_TICKETS)return;
-    const ts=terms(q);
-    if(!ts.length){box.innerHTML='<div class="empty-state">输入房号、工单号或故障关键词后查询。公开查询不会自动列出全部住户记录。</div>';if(count)count.textContent='';return}
-    const rows=QISHAN_TICKETS.filter(t=>{const h=haystack(t);return ts.every(x=>h.includes(x))});
-    if(window.QishanState)QishanState.search(String(q||'').trim());
-    if(count)count.textContent=rows.length?`${rows.length} 条公开记录`:'没有匹配记录';
-    box.innerHTML=rows.length?rows.map(t=>`<div class="ticket"><div class="row"><b>${esc(t.id)}</b><span class="meta">${esc(t.date)}</span></div><p>${esc(t.room)} · ${esc(t.text)}</p><span class="tag">${esc(t.status)}</span></div>`).join(''):'<div class="empty-state">没有找到匹配的公开工单。可以缩短关键词，或换用房号、工单号和故障名称。</div>';
-  }
-  document.addEventListener('DOMContentLoaded',()=>{
-    const q=document.querySelector('#ticket-q'),b=document.querySelector('#ticket-btn');if(!q||!b)return;
-    const initial=new URLSearchParams(location.search).get('q')||'';if(initial)q.value=initial;render(initial);
-    const go=()=>render(q.value);b.addEventListener('click',go);q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}})
-  })
+  function norm(s){return String(s||'').toLowerCase().replace(/[\s_-]+/g,'')}
+  function memoId(t){return 'ticket-'+String(t.id||'').replace(/[^a-z0-9-]/gi,'')}
+  function memoButton(t){if(!window.QishanState)return '';const saved=QishanState.hasMemo(memoId(t));return `<button class="text-button ticket-memo" type="button" data-ticket-memo="${esc(t.id)}" ${saved?'disabled aria-pressed="true"':'aria-pressed="false"'}>${saved?'已记入备忘':'记到看房备忘'}</button>`}
+  function bindMemo(box){if(!window.QishanState||!window.QISHAN_TICKETS)return;box.querySelectorAll('[data-ticket-memo]').forEach(btn=>btn.addEventListener('click',()=>{const t=QISHAN_TICKETS.find(x=>x.id===btn.dataset.ticketMemo);if(!t)return;QishanState.memoAdd({id:memoId(t),text:`${t.room} · ${t.date} · ${t.text}（${t.status}）`,category:'物业与楼栋',sourcePath:location.pathname+'?q='+encodeURIComponent(t.room||t.id),sourceTitle:'维修工单 '+t.id,at:Date.now()});btn.textContent='已记入备忘';btn.disabled=true;btn.setAttribute('aria-pressed','true')}))}
+  function render(q){const box=document.querySelector('#ticket-list');if(!box||!window.QISHAN_TICKETS)return;const n=norm(q);const rows=QISHAN_TICKETS.filter(t=>!n||norm([t.id,t.date,t.room,t.text,t.status].concat(t.keywords||[]).join(' ')).includes(n));box.innerHTML=rows.length?rows.map(t=>`<div class="ticket"><div class="row"><b>${esc(t.id)}</b><span class="meta">${esc(t.date)}</span></div><p>${esc(t.room)} · ${esc(t.text)}</p><div class="ticket-actions"><span class="tag">${esc(t.status)}</span>${memoButton(t)}</div></div>`).join(''):'<div class="empty-state">没有找到匹配的公开工单。可尝试房号、工单号或故障关键词。</div>';bindMemo(box)}
+  document.addEventListener('DOMContentLoaded',()=>{const q=document.querySelector('#ticket-q'),b=document.querySelector('#ticket-btn');if(!q||!b)return;const initial=new URLSearchParams(location.search).get('q')||'';if(initial)q.value=initial;render(initial);const go=()=>render(q.value);b.addEventListener('click',go);q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}})})
 })();

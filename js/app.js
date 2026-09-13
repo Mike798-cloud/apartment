@@ -57,10 +57,33 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open'))close()});
   }
   function setupDocs(){document.querySelectorAll('[data-doc]').forEach(a=>a.addEventListener('click',()=>window.QishanState&&QishanState.doc(a.dataset.doc)))}
-  function setupClear(){document.querySelectorAll('[data-clear-state]').forEach(b=>b.addEventListener('click',()=>{if(confirm('仅清除本浏览器保存的最近浏览、搜索与给许唯的回复。继续吗？')){QishanState&&QishanState.clear();location.reload()}}))}
+  function setupClear(){document.querySelectorAll('[data-clear-state]').forEach(b=>b.addEventListener('click',()=>{if(confirm('仅清除本浏览器保存的最近浏览、搜索、看房备忘与给许唯的回复。继续吗？')){QishanState&&QishanState.clear();location.reload()}}))}
   function setupActiveNav(){const here=location.pathname.replace(/\/+$/,'/');let root;try{root=new URL((document.body.dataset.root||'')+'index.html',document.baseURI||location.href).pathname}catch(e){return}document.querySelectorAll('.nav a').forEach(a=>{try{const p=new URL(a.href,document.baseURI||location.href).pathname.replace(/\/+$/,'/');const active=p===root?(here===root||here===root.replace(/index\.html$/,'')):here.startsWith(p.replace(/index\.html$/,''));if(active)a.setAttribute('aria-current','page')}catch(e){}})}
   function setupImageLoading(){document.querySelectorAll('img:not(.hero-media img)').forEach(img=>{if(!img.hasAttribute('loading'))img.loading='lazy';img.decoding='async'})}
   function loadNarrativeStyles(){const root=document.body.dataset.root||'';if(document.querySelector('link[data-qs-narrative]'))return;const l=document.createElement('link');l.rel='stylesheet';l.href=root+'css/narrative.css';l.dataset.qsNarrative='1';document.head.appendChild(l)}
   function loadSupport(){const root=document.body.dataset.root||'';if(!document.querySelector('link[data-qs-support]')){const l=document.createElement('link');l.rel='stylesheet';l.href=root+'css/support.css';l.dataset.qsSupport='1';document.head.appendChild(l)}if(!document.querySelector('script[data-qs-support]')){const s=document.createElement('script');s.src=root+'js/support.js';s.dataset.qsSupport='1';document.body.appendChild(s)}}
-  document.addEventListener('DOMContentLoaded',()=>{if(window.QishanState)QishanState.visit(location.pathname,document.body.dataset.pageTitle||document.title);setupSharedLinkIntro();setupMenu();setupLightbox();setupDocs();setupClear();setupActiveNav();setupImageLoading();loadNarrativeStyles();loadSupport()});
+  function loadMemoStyles(){const root=document.body.dataset.root||'';if(document.querySelector('link[data-qs-memo]'))return;const l=document.createElement('link');l.rel='stylesheet';l.href=root+'css/memo.css';l.dataset.qsMemo='1';document.head.appendChild(l)}
+  function setupMemoTools(){
+    if(!window.QishanState)return;
+    const root=document.body.dataset.root||'',memoHref=root+'memo/index.html';
+    const info=document.querySelector('.footer-grid>div:last-child p');
+    if(info&&!info.querySelector('[data-memo-footer]')){const br=document.createElement('br'),a=document.createElement('a');a.href=memoHref;a.textContent='看房备忘';a.dataset.memoFooter='1';info.append(br,a)}
+    const p=location.pathname.replace(/\/+$/,'/');
+    if(p.endsWith('/feedback/index.html')||p.endsWith('/feedback/')){const hint=document.querySelector('.sidebar .box:last-child p');if(hint&&!hint.querySelector('[data-memo-feedback]')){hint.append(document.createElement('br'));const a=document.createElement('a');a.href=memoHref;a.textContent='查看看房备忘';a.dataset.memoFeedback='1';hint.append(a)}}
+    const configs=[
+      {match:x=>x.endsWith('/homes/a-1403.html')||x.endsWith('/homes/a-1403/'),id:'page-a1403',category:'房子本身',text:'A栋1403：¥4,980/月，52㎡，两室一厅，东向，14/17层；厨卫排风接公共竖井。现场还要确认窗体、水电表、固定设备与交付家具。'},
+      {match:x=>x.endsWith('/plans/index.html')||x.endsWith('/plans/'),id:'page-plans-14f',category:'房子本身',text:'A栋14层当前导览只标1401、1402、1403、1405、1406五个住宅单元；公开导览与旧备案图用途不同，核对历史边界要再看2018旧改公开摘录。'},
+      {match:x=>x.endsWith('/notices/2026-07.html')||x.endsWith('/notices/2026-07/'),id:'page-notice-2026-07',category:'物业与楼栋',text:'A栋14层近期有夜间低频异响。7月16日已完成公共排风段清洁与部分止回组件调整，但个别支管仍保留观察，若持续倒灌或异味建议继续报修。'}
+    ];
+    const cfg=configs.find(x=>x.match(p));if(!cfg)return;
+    const article=document.querySelector('.article');if(!article||article.querySelector('[data-memo-capture]'))return;
+    const box=document.createElement('div');box.className='memo-capture';box.dataset.memoCapture='1';
+    const saved=QishanState.hasMemo(cfg.id);
+    box.innerHTML='<div><b>看房备忘</b><small>把这一页的关键信息留在本机，之后可以一起对照。</small></div><div class="memo-capture-actions"><button class="btn secondary" type="button" data-memo-save></button><a class="text-link" data-memo-view>查看备忘</a></div>';
+    const btn=box.querySelector('[data-memo-save]'),view=box.querySelector('[data-memo-view]');view.href=memoHref;
+    const sync=()=>{const yes=QishanState.hasMemo(cfg.id);btn.textContent=yes?'已记入备忘':'记到看房备忘';btn.disabled=yes;btn.setAttribute('aria-pressed',String(yes))};
+    btn.addEventListener('click',()=>{QishanState.memoAdd({id:cfg.id,text:cfg.text,category:cfg.category,sourcePath:location.pathname,sourceTitle:document.body.dataset.pageTitle||document.title,at:Date.now()});sync()});
+    sync();const update=article.querySelector('.update-line');article.insertBefore(box,update||null);
+  }
+  document.addEventListener('DOMContentLoaded',()=>{if(window.QishanState&&!/\/memo\//.test(location.pathname))QishanState.visit(location.pathname,document.body.dataset.pageTitle||document.title);setupSharedLinkIntro();setupMenu();setupLightbox();setupDocs();setupClear();setupActiveNav();setupImageLoading();loadMemoStyles();setupMemoTools();loadNarrativeStyles();loadSupport()});
 })();
